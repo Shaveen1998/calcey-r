@@ -1,41 +1,29 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {loginStart, loginFailed, loginSuccess} from '../redux/users/userSlice'
+import { login } from '../redux/reducers/userSlice';
 
 function Login() {
 
     const [email, setEmail] = useState({});
     const [password, setPassword] = useState({});
-    const { loading, error, loggedin } = useSelector((state) => state.user);
     const dispatch = useDispatch()
-
     const navigate = useNavigate()
-
-   
-    
 
     const handleSubmit = (e)=>{
         e.preventDefault();
+      //   if(!email || !password || email==='' || password===''){
+      //     const error = new Error('enter fields')
+      //   return  dispatch(loginFailed(error))
+      // }
 
-        dispatch(loginStart())
-        
-      if (!email || !password) {
-        return dispatch(loginFailed('Please fill out all fields.'));
-      }else{
-
-        const loggedUser = {
-            email:email,
-            passw:password
-        }
-        dispatch(loginSuccess(loggedUser))
-        console.log('User logged in', loggedUser)
-        navigate('/home')
-        
+      const loggedInuser = {
+        email,
+        password
       }
-       
+      dispatch(login(loggedInuser))
+      navigate('/home')
     }
-
 
   return (
     <div>
@@ -44,21 +32,7 @@ function Login() {
       <form action="" onSubmit={handleSubmit}>
         <input type="text" placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
         <input type="password" placeholder='Password' onChange={(e)=>setPassword(e.target.value)}/>
-        <button>
-        {loading ? (
-                <>
-                  <div/>
-                  <span>Loading...</span>
-                </>
-              ) : (
-                'Log In'
-              )}
-        </button>
-        {error && (
-            <div>
-            {error}
-          </div>
-        )}
+        <button>Login</button>
       </form>
     </div>
   )

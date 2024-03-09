@@ -1,11 +1,28 @@
-import React from 'react'
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeFromCart } from '../redux/reducers/cartSlice';
 
-function Cart() {
+const Cart = () => {
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.cart);
+
+  const handleRemoveFromCart = (productId) => {
+    dispatch(removeFromCart(productId));
+  };
+
   return (
     <div>
-      <h1>Cart</h1>
+      <h2>Shopping Cart</h2>
+      <ul>
+        {cart.map(item => (
+          <li key={item.id}>
+            <span>{item.title} - ${item.price}</span>
+            <button onClick={() => handleRemoveFromCart(item.id)}>Remove</button>
+          </li>
+        ))}
+      </ul>
     </div>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;
